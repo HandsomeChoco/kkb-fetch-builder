@@ -103,7 +103,7 @@ class ApiBuilder {
      * set multiple query parameters
      * @param query ex) `["key=value", "key2=value2", "key3=value3"]`
      */
-    quries(query) {
+    queries(query) {
         this.qs = "?" + query.join("&");
         return this;
     }
