@@ -1,8 +1,8 @@
 {
-  "name": "api-builder",
+  "name": "kkb-fetch-builder",
   "version": "0.0.1",
   "description": "frontend network request library based on fetch api",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
