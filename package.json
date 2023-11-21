@@ -1,6 +1,6 @@
 {
   "name": "kkb-fetch-builder",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "frontend network request library based on fetch api",
   "main": "dist/index.js",
   "scripts": {
