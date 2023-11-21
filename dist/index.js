@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 class ApiBuilder {
     /**
-     * @param baseUrl - base url
+     * @param baseUrl - example: `http://localhost:3000`
      */
     constructor(baseUrl) {
         this.baseUrl = baseUrl;
@@ -19,44 +19,65 @@ class ApiBuilder {
         this.fetchOption = {};
         this.endPoint = '';
     }
+    /**
+     * set request method to GET (default)
+     */
     get() {
         this.fetchOption = Object.assign({ method: "GET" }, this.fetchOption);
         return this;
     }
+    /**
+     * set request method to POST
+     */
     post() {
         this.fetchOption = Object.assign({ method: "POST" }, this.fetchOption);
         return this;
     }
+    /**
+     * set request method to PUT
+     */
     put() {
         this.fetchOption = Object.assign({ method: "PUT" }, this.fetchOption);
         return this;
     }
+    /**
+     * set request method to PATCH
+     */
     patch() {
         this.fetchOption = Object.assign({ method: "PATCH" }, this.fetchOption);
         return this;
     }
+    /**
+     * set request method to DELETE
+     */
     delete() {
         this.fetchOption = Object.assign({ method: "DELETE" }, this.fetchOption);
         return this;
     }
+    /**
+     * set header contents
+     * @param headerOptions
+     */
     headers(headerOptions) {
         if (headerOptions) {
             this.fetchOption = Object.assign(Object.assign({}, this.fetchOption), { headers: Object.assign({}, headerOptions) });
         }
         return this;
     }
+    /**
+     * set body data. it automatically serialized and change header content-type to application/json
+     * @param data - body object
+     */
     jsonBody(data) {
         if (typeof data == "object" && data !== null) {
             this.fetchOption = Object.assign(Object.assign({}, this.fetchOption), { headers: Object.assign(Object.assign({}, this.fetchOption.headers), { 'Content-Type': 'application/json' }), body: JSON.stringify(data) });
         }
         return this;
     }
-    blobBody(data) {
-        if (typeof data == "object" && data !== null) {
-            this.fetchOption = Object.assign(Object.assign({}, this.fetchOption), { headers: Object.assign(Object.assign({}, this.fetchOption.headers), { 'Content-Type': 'application/json' }), body: new Blob(data) });
-        }
-        return this;
-    }
+    /**
+     * set url under base url
+     * @param url - ex. /api/user/login
+     */
     endpoint(url) {
         if (url[0] !== "/") {
             url = "/" + url;
@@ -64,6 +85,11 @@ class ApiBuilder {
         this.endPoint = url;
         return this;
     }
+    /**
+     * set query parameter
+     * @param query ex) `key=value`
+     * @returns
+     */
     query(query) {
         if (query[0] === "?") {
             this.qs = query;
@@ -73,16 +99,28 @@ class ApiBuilder {
         }
         return this;
     }
+    /**
+     * set multiple query parameters
+     * @param query ex) `["key=value", "key2=value2", "key3=value3"]`
+     */
     quries(query) {
         this.qs = "?" + query.join("&");
         return this;
     }
+    /**
+     * override base url
+     * @param url
+     * @returns
+     */
     overrideBaseUrl(url) {
         if (url) {
             this.baseUrl = url;
         }
         return this;
     }
+    /**
+     * send request to call this method
+     */
     send() {
         return __awaiter(this, void 0, void 0, function* () {
             return yield fetch(this.baseUrl + this.endPoint + this.qs, Object.assign({}, this.fetchOption))
