@@ -1,6 +1,7 @@
 # kkb-fetch-builder
 
-Frontend network request library based on builder design pattern and fetch api
+Frontend network request library based on builder design pattern and fetch api.   
+currently it doesn't working with script embedded in HTML file.
 
 ## install
 
@@ -28,13 +29,15 @@ const api = new ApiBuilder("http://example.com:3000")
 ## set endpoint and send request
 
 call `endpoint()` method and pass detail url in parameter.   
-this request is sent with `get` method default.
+you can specify method type with call `get(), post(), put(), patch(), delete()` methods.
+also each method can receive path parameter 
 
-method call sequence is doesn't matter.   
-but, `send()` method is have to be end of the chaining. 
+> * default method is `get`, when you don't specify method type. but also you can explicity method type to `get`.
+> * method call sequence doesn't matter. but, `send()` have to be end of the chaining. 
+
 ```ts
-// get request
-export const getSomethings = async () => await api.endpoint("/something").send();
+// get request to http://example.com:3000/something/
+export const getSomething = async () => await api.endpoint("/something").send();
 
 // post request
 export const addSomething = async () => await api.endpoint("/something").post().send();
@@ -50,11 +53,12 @@ export const deleteSomething = async () => await api.endpoint("/something").dele
 
 ```
 
-## set body and headers
-you can also set body content and header.
-pass argument like how `body` and `header` of fetch api option filled.
-```ts
+## Set body and headers
+Pass same argument how `body` and `header` of fetch api option object is filled.
 
+> You don't need to serialize parameter of `jsonBody` method and 'Content-Type': 'application/json' in header object.
+
+```ts
 export const requestWithPayload = async () =>
     await api
         .endpoint("/something")
@@ -64,8 +68,7 @@ export const requestWithPayload = async () =>
         })
         .jsonBody({
             /* 
-                body object here. it serialize automatically in the method.
-                also not neccessary to explicity content-type: application/json in hedaer method
+                body object here. 
             */
         })
         .send()
@@ -74,9 +77,12 @@ export const requestWithPayload = async () =>
 ## add query string paremeter
 
 ```ts
-export const requestWithQuery = async () =>
+// get request to http://localhost:3000/something/1?key1=value&key2=value
+
+export const getSomethingWithQuery = async () =>
     await api
         .endpoint("/something")
+        .get("1")
         .queries(
             ["key1=value", "key2=value", ..., ]
         )
